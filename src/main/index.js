@@ -31,6 +31,9 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // 隐藏顶部菜单
+  mainWindow.setMenu(null)
 }
 
 app.on('ready', createWindow)
