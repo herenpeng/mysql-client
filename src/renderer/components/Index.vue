@@ -1,14 +1,16 @@
 <template>
   <el-container>
     <el-header>
-      <Header @get-connections="getConnections"/>
+      <Header @get-connections="getConnections"
+              @open-command="openCommand"/>
     </el-header>
     <el-container>
       <el-aside>
-        <Aside :connections="connections" @get-connections="getConnections"/>
+        <Aside :connections="connections"
+               @get-connections="getConnections"/>
       </el-aside>
       <el-main>
-        <Main/>
+        <Main :commandLineShow="commandLineShow" @close-command="closeCommand"/>
       </el-main>
     </el-container>
   </el-container>
@@ -25,7 +27,8 @@ export default {
   components: { Header, Aside, Main },
   data () {
     return {
-      connections: []
+      connections: [],
+      commandLineShow: false
     }
   },
   created () {
@@ -34,6 +37,12 @@ export default {
   methods: {
     getConnections () {
       this.connections = storage.getConnections()
+    },
+    openCommand () {
+      this.commandLineShow = true
+    },
+    closeCommand () {
+      this.commandLineShow = false
     }
   }
 }
@@ -41,12 +50,11 @@ export default {
 
 <style>
 .el-header {
-  background-color: #dedede;
+  box-shadow: 0 2px 4px rgb(64, 158, 255), 0 0 6px rgb(64, 158, 255);
   line-height: 60px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
-.el-aside {
-  height: 100%;
-  background-color: #dedede;
+.el-main {
+  padding-top: 0px;
 }
 </style>

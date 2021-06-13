@@ -23,10 +23,10 @@
         </el-form>
 
         <span slot="footer" class="dialog-footer">
-                <el-button type="success" @click="testConnection" style="float: left">测试连接</el-button>
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogTitle==='create'?createConnection():updateConnection()">确 定</el-button>
-            </span>
+            <el-button type="success" @click="testConnection" style="float: left">测试连接</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogTitle==='create'?createConnection():updateConnection()">确 定</el-button>
+        </span>
     </el-dialog>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       type: String,
       default: null
     },
-    connectionIndex: {
+    updateConnectionIndex: {
       type: Number,
       default: -1
     }
@@ -65,7 +65,7 @@ export default {
     dialogTitle (newValue, oldValue) {
       this.initData(newValue, oldValue)
     },
-    connectionIndex (newValue, oldValue) {
+    updateConnectionIndex (newValue, oldValue) {
       this.initData('update')
     }
   },
@@ -78,7 +78,7 @@ export default {
       this.dialogVisible = true
       if (newValue === 'update') {
         // 更新操作
-        this.connection = storage.getConnection(this.connectionIndex)
+        this.connection = storage.getConnection(this.updateConnectionIndex)
         return
       }
       if (newValue === 'create') {
@@ -102,7 +102,7 @@ export default {
       this.$emit('get-connections')
     },
     updateConnection () {
-      storage.updateConnection(this.connection, this.connectionIndex)
+      storage.updateConnection(this.connection, this.updateConnectionIndex)
       this.$emit('get-connections')
     },
     handleClose (done) {
