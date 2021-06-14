@@ -1,4 +1,5 @@
 export default {
+  // 格式化时间
   dateFormat (date, fmt) {
     if (!fmt) {
       fmt = 'yyyy-MM-dd HH:mm:ss'

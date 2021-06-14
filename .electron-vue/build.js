@@ -13,6 +13,7 @@ const Listr = require('listr')
 const mainConfig = require('./webpack.main.config')
 const rendererConfig = require('./webpack.renderer.config')
 const webConfig = require('./webpack.web.config')
+const Multispinner = require('multispinner')
 
 const doneLog = chalk.bgGreen.white(' DONE ') + ' '
 const errorLog = chalk.bgRed.white(' ERROR ') + ' '
@@ -34,6 +35,7 @@ async function build () {
 
   del.sync(['dist/electron/*', '!.gitkeep'])
 
+  let tasks = ['main', 'renderer']
   const m = new Multispinner(tasks, {
     preText: 'building',
     postText: 'process'
@@ -41,7 +43,7 @@ async function build () {
 
   let results = ''
 
-  const tasks = new Listr(
+  tasks = new Listr(
     [
       {
         title: 'building master process',
