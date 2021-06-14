@@ -14,7 +14,7 @@
       </el-aside>
       <el-main>
         <Main :info="info" :commandLineShow="commandLineShow" @close-command="closeCommand"
-              :errorMessage="errorMessage" @show-message="showMessage"/>
+              :message="message" @show-message="showMessage"/>
       </el-main>
     </el-container>
   </el-container>
@@ -38,7 +38,10 @@ export default {
         connectionName: null,
         useDatabaseName: null
       },
-      errorMessage: null
+      message: {
+        data: null,
+        type: null
+      }
     }
   },
   created () {
@@ -61,8 +64,11 @@ export default {
         useDatabaseName
       }
     },
-    showMessage (message) {
-      this.errorMessage = message
+    showMessage (data, type) {
+      this.message = {
+        data,
+        type
+      }
     }
   }
 }

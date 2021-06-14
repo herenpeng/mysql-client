@@ -70,7 +70,7 @@ export default {
       this.connectionName = connection.name
       database.getConnection(connection, (err, conn) => {
         if (err) {
-          this.showMessage(err.message)
+          this.showMessage(err.message, 'error')
           this.$message.error('链接失败，请检查网络或链接信息')
           return
         }
@@ -131,8 +131,8 @@ export default {
         this.tables = data
       })
     },
-    showMessage (message) {
-      this.$emit('show-message', message)
+    showMessage (data, type) {
+      this.$emit('show-message', data, type)
     }
   }
 }

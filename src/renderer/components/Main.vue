@@ -13,20 +13,20 @@
 
         <CommandLine @command-change="commandChange"/>
 
-        <div class="error-message" v-if="errorMessage">
+        <div class="error-message" v-if="message.data">
             <el-alert
-                    :title="errorMessage"
-                    type="error"
+                    :title="message.data"
+                    :type="message.type"
                     effect="dark">
             </el-alert>
         </div>
-        <div class="data">
+        <div class="data" v-if="tableData">
             <table cellspacing="0">
-                <tr v-for="(row, index) in tableData" :key="index">
-                    <td class="column-name" v-if="index === 0" v-for="(value, key) of row" style="text-align: center;">{{ key }}</td>
+                <tr v-for="(row, index) in tableData" v-if="index === 0">
+                    <td class="column-name" v-for="(value, key) of row" :key="key" style="text-align: center;">{{ key }}</td>
                 </tr>
                 <tr v-for="(row, index) in tableData" :key="index">
-                    <td v-for="(value, key) of row"><input :value="value | valueFilter"/></td>
+                    <td v-for="(value, key) of row" :key="key"><input :value="value | valueFilter"/></td>
                 </tr>
             </table>
         </div>
@@ -54,9 +54,9 @@ export default {
         useDatabaseName: null
       }
     },
-    errorMessage: {
-      type: String,
-      default: null
+    message: {
+      type: Object,
+      default: { data: null, type: null }
     }
   },
   filters: {
@@ -93,11 +93,19 @@ export default {
       if (this.info.conn) {
         database.query(this.info.conn, this.command, (err, data) => {
           if (err) {
-            this.showMessage(err.message)
+            this.showMessage(err.message, 'error')
             this.$message.error('SQL查询错误，请检查SQL格式')
+            this.tableData = null
             return
           }
-          this.tableData = data
+          // 如果是 select 语句，则使用表格展示
+          if (this.command.indexOf('select') === 0) {
+            this.showMessage(null)
+            this.tableData = data
+          } else {
+            this.showMessage(JSON.stringify(data), 'success')
+            this.tableData = null
+          }
         })
       }
     },
@@ -107,9 +115,8 @@ export default {
     commandChange (command) {
       this.command = command
     },
-    showMessage (message) {
-      // this.errorMessage = message
-      this.$emit('show-message', message)
+    showMessage (message, type) {
+      this.$emit('show-message', message, type)
     }
   }
 }
