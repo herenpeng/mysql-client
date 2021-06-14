@@ -32,6 +32,7 @@
 
 <script>
 import storage from '@/util/storage'
+import database from '@/util/database'
 
 export default {
   name: 'ConnectionDialog',
@@ -92,9 +93,17 @@ export default {
       }
     },
     testConnection () {
-      this.$message({
-        type: 'success',
-        message: '连接成功'
+      database.getConnection(this.connection, (err, conn) => {
+        if (err) {
+          this.$message.error('链接失败，请检查网络或链接信息')
+          return
+        }
+        if (conn !== null) {
+          this.$message({
+            type: 'success',
+            message: '连接成功'
+          })
+        }
       })
     },
     createConnection () {
