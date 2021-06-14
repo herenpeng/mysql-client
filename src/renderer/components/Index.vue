@@ -7,10 +7,14 @@
     <el-container>
       <el-aside>
         <Aside :connections="connections"
-               @get-connections="getConnections"/>
+               @get-connections="getConnections"
+               @current-info="currentInfo"
+               @show-message="showMessage"
+        />
       </el-aside>
       <el-main>
-        <Main :commandLineShow="commandLineShow" @close-command="closeCommand"/>
+        <Main :info="info" :commandLineShow="commandLineShow" @close-command="closeCommand"
+              :errorMessage="errorMessage" @show-message="showMessage"/>
       </el-main>
     </el-container>
   </el-container>
@@ -28,7 +32,13 @@ export default {
   data () {
     return {
       connections: [],
-      commandLineShow: false
+      commandLineShow: false,
+      info: {
+        conn: null,
+        connectionName: null,
+        useDatabaseName: null
+      },
+      errorMessage: null
     }
   },
   created () {
@@ -43,6 +53,16 @@ export default {
     },
     closeCommand () {
       this.commandLineShow = false
+    },
+    currentInfo (conn, connectionName, useDatabaseName) {
+      this.info = {
+        conn,
+        connectionName,
+        useDatabaseName
+      }
+    },
+    showMessage (message) {
+      this.errorMessage = message
     }
   }
 }

@@ -1,37 +1,15 @@
 const mysql = require('mysql')
 
-// Perform a query
-// const $query = 'SELECT * FROM `zero-admin` LIMIT 10'
-//
-// connection.query($query, function (err, rows, fields) {
-//   if (err) {
-//     console.log('An error ocurred performing the query.')
-//     console.log(err)
-//     return
-//   }
-//
-//   console.log('Query succesfully executed', rows)
-// })
-//
-// // Close the connection
-// connection.end(function () {
-//   // The connection has been closed
-// })
-
 export default {
-  getConnection (connection) {
+  getConnection (connection, callback) {
     const conn = mysql.createConnection({
       host: connection.host,
       user: connection.username,
       password: connection.password
     })
     conn.connect(function (err) {
-      // 如果链接报错
-      if (err) {
-        console.log(err.code + ':' + err.fatal)
-      }
+      callback(err, conn)
     })
-    return conn
   },
   getDatabases (conn, callback) {
     conn.query('show databases;',
@@ -71,6 +49,13 @@ export default {
         }
       )
     })
+  },
+  query (conn, sql, callback) {
+    conn.query(sql,
+      function (err, rows, fields) {
+        callback(err, rows)
+      }
+    )
   }
 
 }

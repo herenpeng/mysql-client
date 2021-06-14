@@ -43,30 +43,56 @@ export default {
       dialogTitle: null,
       updateConnectionIndex: -1,
       conn: null,
+      connectionName: null,
       connectionShowIndex: -1,
       databases: [],
       useDatabaseName: null,
       tables: []
     }
   },
+  watch: {
+    conn () {
+      this.currentInfo()
+    },
+    connectionName () {
+      this.currentInfo()
+    },
+    useDatabaseName () {
+      this.currentInfo()
+    }
+  },
   methods: {
+    currentInfo () {
+      this.$emit('current-info', this.conn, this.connectionName, this.useDatabaseName)
+    },
     connection (index) {
       const connection = storage.getConnection(index)
-      const conn = database.getConnection(connection)
-      if (conn !== null) {
-        this.conn = conn
-        database.getDatabases(this.conn, (data) => {
-          if (data !== null) {
-            this.databases = data
-            this.connectionShowIndex = index
-          }
-        })
-      }
+      this.connectionName = connection.name
+      database.getConnection(connection, (err, conn) => {
+        if (err) {
+          this.showMessage(err.message)
+          this.$message.error('链接失败，请检查网络或链接信息')
+          return
+        }
+        if (conn !== null) {
+          this.conn = conn
+          database.getDatabases(this.conn, (data) => {
+            if (data !== null) {
+              this.databases = data
+              this.connectionShowIndex = index
+            }
+          })
+        }
+      })
     },
     closeConnection () {
-      this.databases = []
-      this.connectionShowIndex = -1
       database.closeConnection(this.conn)
+      this.conn = null
+      this.connectionName = null
+      this.connectionShowIndex = -1
+      this.databases = []
+      this.useDatabaseName = null
+      this.tables = null
     },
     openUpdateConnectionDialog (index) {
       this.dialogTitle = 'update'
@@ -97,18 +123,28 @@ export default {
     },
     getTables (databaseName) {
       if (!databaseName) {
+        this.useDatabaseName = null
         return
       }
       this.useDatabaseName = databaseName
-      database.getTables(this.conn, databaseName, (data) => {
+      database.getTables(this.conn, this.useDatabaseName, (data) => {
         this.tables = data
       })
+    },
+    showMessage (message) {
+      this.$emit('show-message', message)
     }
   }
 }
 </script>
 
 <style scoped>
+.aside {
+    overflow: hidden;
+    overflow-y: scroll;
+    overflow-: hidden;
+    height: 700px;
+}
 .el-card {
     cursor: pointer;
 }
@@ -127,6 +163,9 @@ export default {
 }
 .el-collapse-item {
     padding-left: 30px;
+}
+.el-collapse-item:hover {
+    background-color: #67C23A;
 }
 .table {
     padding-left: 10px;

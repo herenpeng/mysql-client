@@ -15,6 +15,11 @@
         lineNumber: ''
       }
     },
+    watch: {
+      commandContent () {
+        this.commandChange()
+      }
+    },
     methods: {
       // 处理命令行行号的方法
       handleTextareaInput () {
@@ -26,6 +31,9 @@
         for (let i = 1; i <= len; i++) {
           this.lineNumber += i + '\n'
         }
+      },
+      commandChange () {
+        this.$emit('command-change', this.commandContent)
       }
     }
   }
@@ -66,7 +74,7 @@
     line-height: 24px;
     border:1px solid #eaeaea;
     background-color: #000000;
-    color: white;
+    color: #00FF00;
     box-sizing: border-box;
     outline:none;
     resize: none;
