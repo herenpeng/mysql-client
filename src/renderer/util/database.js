@@ -50,12 +50,17 @@ export default {
       )
     })
   },
-  query (conn, sql, callback) {
-    conn.query(sql,
-      function (err, rows, fields) {
-        callback(err, rows)
+  query (conn, command, callback) {
+    const sqlArr = command.split(';')
+    for (let sql of sqlArr) {
+      if (sql) {
+        conn.query(sql,
+          function (err, rows, fields) {
+            callback(err, rows)
+          }
+        )
       }
-    )
+    }
   }
 
 }

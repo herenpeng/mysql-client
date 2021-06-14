@@ -103,7 +103,7 @@ export default {
             this.showMessage(null)
             this.tableData = data
           } else {
-            this.showMessage(JSON.stringify(data), 'success')
+            this.showMessage('OK 执行成功，受影响的行数:' + data.affectedRows, 'success')
             this.tableData = null
           }
         })
