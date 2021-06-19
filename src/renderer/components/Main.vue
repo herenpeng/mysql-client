@@ -76,7 +76,6 @@ export default {
   methods: {
     run () {
       if (!this.info.connectionName) {
-        this.errorMessage = '请选择链接'
         this.$message({
           type: 'info',
           message: '请选择链接'
