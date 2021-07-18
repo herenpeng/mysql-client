@@ -9,7 +9,3 @@
     name: 'App'
   }
 </script>
-
-<style>
-  /* CSS */
-</style>

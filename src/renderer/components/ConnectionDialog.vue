@@ -1,6 +1,6 @@
 <template>
     <el-dialog
-            :title="dialogTitleMap[dialogTitle]"
+            :title="dialogTitle"
             :visible.sync="dialogVisible"
             width="50%"
             :before-close="handleClose">
@@ -25,26 +25,24 @@
         <span slot="footer" class="dialog-footer">
             <el-button type="success" @click="testConnection" style="float: left">测试连接</el-button>
             <el-button @click="handleClose">取 消</el-button>
-            <el-button type="primary" @click="dialogTitle==='create'?createConnection():updateConnection()">确 定</el-button>
+            <el-button type="primary" @click="updateIndex===-1?createConnection():updateConnection()">确 定</el-button>
         </span>
     </el-dialog>
 </template>
 
 <script>
-import storage from '@/util/storage'
-import database from '@/util/database'
+import store from '@/store'
+import dataSource from '@/util/dataSource'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'ConnectionDialog',
-  props: {
-    dialogTitle: {
-      type: String,
-      default: null
-    },
-    updateConnectionIndex: {
-      type: Number,
-      default: -1
-    }
+  computed: {
+    ...mapGetters([
+      'dialogTitle',
+      'dialogVisible',
+      'updateIndex'
+    ])
   },
   data () {
     return {
@@ -54,68 +52,33 @@ export default {
         'port': '3306',
         'username': 'root',
         'password': ''
-      },
-      dialogVisible: false,
-      dialogTitleMap: {
-        create: '创建链接',
-        update: '更新链接'
       }
-    }
-  },
-  watch: {
-    dialogTitle (newValue, oldValue) {
-      this.initData(newValue, oldValue)
-    },
-    updateConnectionIndex (newValue, oldValue) {
-      this.initData('update')
     }
   },
   methods: {
-    initData (newValue, oldValue) {
-      if (newValue === null) {
-        this.dialogVisible = false
-        return
-      }
-      this.dialogVisible = true
-      if (newValue === 'update') {
-        // 更新操作
-        this.connection = storage.getConnection(this.updateConnectionIndex)
-        return
-      }
-      if (newValue === 'create') {
-        this.connection = {
-          'name': '',
-          'host': '127.0.0.1',
-          'port': '3306',
-          'username': 'root',
-          'password': ''
-        }
-      }
-    },
     testConnection () {
-      database.getConnection(this.connection, (err, conn) => {
-        if (err) {
-          this.$message.error('链接失败，请检查网络或链接信息')
-          return
-        }
+      dataSource.getConn(this.connection).then(conn => {
         if (conn !== null) {
           this.$message({
             type: 'success',
             message: '连接成功'
           })
         }
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('链接失败，请检查网络或链接信息')
       })
     },
     createConnection () {
-      storage.addConnection(this.connection)
-      this.$emit('get-connections')
+      store.dispatch('connection/createConnection', this.connection)
+      this.handleClose()
     },
     updateConnection () {
-      storage.updateConnection(this.connection, this.updateConnectionIndex)
-      this.$emit('get-connections')
+      store.dispatch('connection/updateConnection', this.connection, this.updateIndex)
+      this.handleClose()
     },
-    handleClose (done) {
-      this.$emit('get-connections')
+    handleClose () {
+      store.dispatch('connection/closeDialog', this.connection, this.updateIndex)
     }
   }
 }

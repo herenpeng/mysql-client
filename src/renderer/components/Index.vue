@@ -1,20 +1,14 @@
 <template>
   <el-container>
     <el-header>
-      <Header @get-connections="getConnections"
-              @open-command="openCommand"/>
+      <Header/>
     </el-header>
     <el-container>
       <el-aside>
-        <Aside :connections="connections"
-               @get-connections="getConnections"
-               @current-info="currentInfo"
-               @show-message="showMessage"
-        />
+        <Aside/>
       </el-aside>
       <el-main>
-        <Main :info="info" :commandLineShow="commandLineShow" @close-command="closeCommand"
-              :message="message" @show-message="showMessage"/>
+        <Main/>
       </el-main>
     </el-container>
   </el-container>
@@ -24,53 +18,10 @@
 import Header from '@/components/Header'
 import Aside from '@/components/Aside'
 import Main from '@/components/Main'
-import storage from '@/util/storage'
 
 export default {
   name: 'Index',
-  components: { Header, Aside, Main },
-  data () {
-    return {
-      connections: [],
-      commandLineShow: false,
-      info: {
-        conn: null,
-        connectionName: null,
-        useDatabaseName: null
-      },
-      message: {
-        data: null,
-        type: null
-      }
-    }
-  },
-  created () {
-    this.getConnections()
-  },
-  methods: {
-    getConnections () {
-      this.connections = storage.getConnections()
-    },
-    openCommand () {
-      this.commandLineShow = true
-    },
-    closeCommand () {
-      this.commandLineShow = false
-    },
-    currentInfo (conn, connectionName, useDatabaseName) {
-      this.info = {
-        conn,
-        connectionName,
-        useDatabaseName
-      }
-    },
-    showMessage (data, type) {
-      this.message = {
-        data,
-        type
-      }
-    }
-  }
+  components: { Header, Aside, Main }
 }
 </script>
 
