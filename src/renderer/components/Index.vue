@@ -32,6 +32,6 @@ export default {
   margin-bottom: 10px;
 }
 .el-main {
-  padding-top: 0px;
+  padding-top: 0;
 }
 </style>

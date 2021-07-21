@@ -33,8 +33,8 @@ const mutations = {
     state.dialogVisible = false
     state.updateIndex = -1
   },
-  // 创建数据库的 socket 链接
-  CREATE_CONN (state, conn) {
+  // 打开数据库的 socket 链接
+  OPEN_CONN (state, conn) {
     state.conn = conn
   },
   CLOSE_CONN (state) {
@@ -92,8 +92,8 @@ const actions = {
   closeDialog ({commit}) {
     commit('CLOSE_DIALOG')
   },
-  createConn ({commit}, conn) {
-    commit('CREATE_CONN', conn)
+  openConn ({commit}, conn) {
+    commit('OPEN_CONN', conn)
   },
   closeConn ({commit}) {
     commit('CLOSE_CONN')

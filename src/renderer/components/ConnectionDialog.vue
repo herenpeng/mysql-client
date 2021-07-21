@@ -39,6 +39,7 @@ export default {
   name: 'ConnectionDialog',
   computed: {
     ...mapGetters([
+      'connections',
       'dialogTitle',
       'dialogVisible',
       'updateIndex'

@@ -1,23 +1,27 @@
 <template>
 <div class="aside">
-    <div v-for="(conn, index) in connections" :key="index">
-        <el-card shadow="hover" :class="{select : index === connIndex}">
-            <span>{{ conn.name }}</span>
-            <div style="float: right;">
-                <i class="el-icon-refresh" @click="createConn(index)"></i>
-                <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
-                <i class="el-icon-delete" @click="deleteConnection(index)"></i>
-                <i class="el-icon-arrow-down" @click="createConn(index)" v-if="index !== connIndex" ></i>
-                <i class="el-icon-arrow-up" @click="closeConn" v-if="index === connIndex" ></i>
-            </div>
-        </el-card>
-        <el-collapse accordion v-if="index === connIndex" @change="showTables">
-            <el-collapse-item v-for="(database, databaseIndex) in databases" :title="database.Database"
-                              :name="database.Database" >
-                <div class="table" v-for="(table, tableIndex) in tables">{{ table.TABLE_NAME }}</div>
-            </el-collapse-item>
-        </el-collapse>
-    </div>
+    <el-menu
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+        <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
+            <template slot="title">
+                <span>{{ conn.name }}</span>
+                <div style="float: right;margin-right: 15px;">
+                    <i class="el-icon-refresh" @click="openConn(index)"></i>
+                    <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
+                    <i class="el-icon-delete" @click="deleteConnection(index)"></i>
+                </div>
+            </template>
+            <el-submenu v-for="(database, databaseIndex) in databases" :index="String(databaseIndex)" >
+                <template slot="title">{{ database.Database }}</template>
+                <el-menu-item v-for="(table, tableIndex) in tables" :index="String(tableIndex)">{{ table.TABLE_NAME }}</el-menu-item>
+            </el-submenu>
+        </el-submenu>
+    </el-menu>
 
 
     <ConnectionDialog/>
@@ -51,11 +55,25 @@ export default {
     }
   },
   methods: {
-    createConn (index) {
+    handleOpen (key, keyPath) {
+      if (keyPath.length === 1) {
+        this.openConn(Number(key))
+      } else if (keyPath.length === 2) {
+        this.showTables(Number(key))
+      }
+    },
+    handleClose (key, keyPath) {
+      if (keyPath.length === 1) {
+        this.closeConn()
+      } else if (keyPath.length === 2) {
+        this.tables = []
+      }
+    },
+    openConn (index) {
       const connection = this.connections[index]
       dataSource.getConn(connection).then(conn => {
         if (conn !== null) {
-          store.dispatch('connection/createConn', conn)
+          store.dispatch('connection/openConn', conn)
           store.dispatch('connection/setConnName', connection.name)
           store.dispatch('connection/setConnIndex', index)
           dataSource.showDatabases(conn).then(data => {
@@ -76,13 +94,9 @@ export default {
       dataSource.closeConn(this.conn)
       store.dispatch('connection/closeConn')
       this.databases = []
-      this.tables = []
     },
-    showTables (databaseName) {
-      if (!databaseName) {
-        return
-      }
-      store.dispatch('database/setDatabaseName', databaseName)
+    showTables (index) {
+      store.dispatch('database/setDatabaseName', this.databases[index].Database)
       dataSource.showTables(this.conn, this.databaseName).then((data) => {
         this.tables = data
       }).catch(err => {
