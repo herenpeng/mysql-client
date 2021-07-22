@@ -16,15 +16,16 @@
                     <i class="el-icon-delete" @click="deleteConnection(index)"></i>
                 </div>
             </template>
-            <el-submenu v-for="(database, databaseIndex) in databases" :index="String(databaseIndex)" >
+            <el-submenu v-if="databases" v-for="(database, databaseIndex) in databases"
+                        :key="databaseIndex" :index="database.Database" >
                 <template slot="title">{{ database.Database }}</template>
-                <el-menu-item v-for="(table, tableIndex) in tables" :index="String(tableIndex)">{{ table.TABLE_NAME }}</el-menu-item>
+                <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
+                              :index="table.TABLE_NAME">{{ table.TABLE_NAME }}</el-menu-item>
             </el-submenu>
         </el-submenu>
     </el-menu>
 
 
-    <ConnectionDialog/>
 </div>
 </template>
 
@@ -32,11 +33,9 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import dataSource from '@/util/dataSource'
-import ConnectionDialog from '@/components/ConnectionDialog'
 
 export default {
   name: 'Aside',
-  components: { ConnectionDialog },
   computed: {
     ...mapGetters([
       'connections',
@@ -50,8 +49,8 @@ export default {
   },
   data () {
     return {
-      databases: [],
-      tables: []
+      databases: null,
+      tables: null
     }
   },
   methods: {
@@ -59,14 +58,15 @@ export default {
       if (keyPath.length === 1) {
         this.openConn(Number(key))
       } else if (keyPath.length === 2) {
-        this.showTables(Number(key))
+        this.showTables(key)
       }
     },
     handleClose (key, keyPath) {
       if (keyPath.length === 1) {
+        this.closeDatabase()
         this.closeConn()
       } else if (keyPath.length === 2) {
-        this.tables = []
+        this.closeDatabase()
       }
     },
     openConn (index) {
@@ -93,10 +93,14 @@ export default {
     closeConn () {
       dataSource.closeConn(this.conn)
       store.dispatch('connection/closeConn')
-      this.databases = []
+      this.databases = null
     },
-    showTables (index) {
-      store.dispatch('database/setDatabaseName', this.databases[index].Database)
+    closeDatabase () {
+      store.dispatch('database/closeDatabase')
+      this.tables = null
+    },
+    showTables (databaseName) {
+      store.dispatch('database/setDatabaseName', databaseName)
       dataSource.showTables(this.conn, this.databaseName).then((data) => {
         this.tables = data
       }).catch(err => {
@@ -134,35 +138,7 @@ export default {
 .aside {
     overflow: hidden;
     overflow-y: scroll;
-    overflow-: hidden;
+    overflow-x: hidden;
     height: 700px;
-}
-.el-card {
-    cursor: pointer;
-}
-.el-card:hover {
-    background-color: #67C23A;
-}
-.select{
-    background-color: #67C23A;
-}
-.el-card i {
-    padding: 3px;
-    border-radius: 5px;
-}
-.el-card i:hover {
-    background-color: #dedede;
-}
-.el-collapse-item {
-    padding-left: 30px;
-}
-.el-collapse-item:hover {
-    background-color: #67C23A;
-}
-.table {
-    padding-left: 10px;
-}
-.table:hover {
-    background-color: #67C23A;
 }
 </style>

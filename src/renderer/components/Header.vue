@@ -1,24 +1,26 @@
 <template>
-    <div>
-        <el-button type="primary" @click="openCreateDialog">创建连接<i
-                class="el-icon-circle-plus-outline el-icon--right"></i></el-button>
-
-        <el-button type="primary" @click="openCommand">打开命令行
-            <i class="el-icon-monitor el-icon--right"></i>
-        </el-button>
-
-        <ConnectionDialog/>
-    </div>
+    <el-menu
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="handleSelect"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b">
+        <el-menu-item index="1" @click="openCreateDialog">创建连接
+            <i class="el-icon-circle-plus-outline el-icon--right"></i></el-menu-item>
+        <el-menu-item index="2" @click="openCommand">打开命令行
+            <i class="el-icon-monitor el-icon--right"></i></el-menu-item>
+    </el-menu>
 </template>
 
 <script>
-import ConnectionDialog from '@/components/ConnectionDialog'
 import store from '@/store'
 
 export default {
   name: 'Header',
-  components: { ConnectionDialog },
   methods: {
+    handleSelect () {
+    },
     openCreateDialog () {
       store.dispatch('connection/openCreateDialog')
     },
@@ -28,6 +30,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

@@ -1,10 +1,10 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="padding: 0;">
       <Header/>
     </el-header>
     <el-container>
-      <el-aside>
+      <el-aside width="300px">
         <Aside/>
       </el-aside>
       <el-main>
@@ -26,12 +26,4 @@ export default {
 </script>
 
 <style>
-.el-header {
-  box-shadow: 0 2px 4px rgb(64, 158, 255), 0 0 6px rgb(64, 158, 255);
-  line-height: 60px;
-  margin-bottom: 10px;
-}
-.el-main {
-  padding-top: 0;
-}
 </style>

@@ -2,7 +2,9 @@
     <div>
         <CommandLine v-if="showCommand" @command-change="commandChange"/>
 
-        <div class="error-message" v-if="message.data">
+        <ConnectionDialog/>
+
+        <div class="error-message" v-if="message">
             <el-alert
                     :title="message.data"
                     :type="message.type"
@@ -25,11 +27,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import CommandLine from '@/components/CommandLine'
+import ConnectionDialog from '@/components/ConnectionDialog'
 import utils from '@/util/utils'
 
 export default {
   name: 'Main',
-  components: { CommandLine },
+  components: { CommandLine, ConnectionDialog },
   computed: {
     ...mapGetters([
       'showCommand',

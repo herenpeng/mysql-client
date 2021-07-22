@@ -3,6 +3,7 @@
             :title="dialogTitle"
             :visible.sync="dialogVisible"
             width="50%"
+            @open="openDialog"
             :before-close="handleClose">
         <el-form label-position="right" label-width="80px" :model="connection" style="width: 300px;">
             <el-form-item label="名称">
@@ -47,16 +48,23 @@ export default {
   },
   data () {
     return {
-      connection: {
-        'name': '',
-        'host': '127.0.0.1',
-        'port': '3306',
-        'username': 'root',
-        'password': ''
-      }
+      connection: {}
     }
   },
   methods: {
+    openDialog () {
+      if (this.updateIndex === -1) {
+        this.connection = {
+          'name': '',
+          'host': '127.0.0.1',
+          'port': '3306',
+          'username': 'root',
+          'password': ''
+        }
+      } else {
+        this.connection = this.connections[this.updateIndex]
+      }
+    },
     testConnection () {
       dataSource.getConn(this.connection).then(conn => {
         if (conn !== null) {
