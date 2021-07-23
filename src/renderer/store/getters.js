@@ -8,6 +8,7 @@ const getters = {
   databaseName: state => state.main.databaseName,
   tableNames: state => state.main.tableNames,
   defaultTab: state => state.main.defaultTab,
+  tableData: state => state.main.tableData,
   message: state => state.message.message
 }
 export default getters

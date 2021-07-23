@@ -15,6 +15,10 @@
             <textarea @input="handleTextareaInput" v-model="commandContent"
                       class="command-content"></textarea>
         </div>
+
+        <Message/>
+
+        <TableData/>
     </div>
 </template>
 
@@ -22,9 +26,12 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import mysqlClient from '@/util/mysqlClient'
+import Message from '@/components/Message'
+import TableData from '@/components/TableData'
 
 export default {
   name: 'CommandLine',
+  components: { Message, TableData },
   computed: {
     ...mapGetters([
       'conn',
@@ -38,11 +45,6 @@ export default {
       lineNumber: ''
     }
   },
-  watch: {
-    commandContent () {
-      this.commandChange()
-    }
-  },
   methods: {
   // 处理命令行行号的方法
     handleTextareaInput () {
@@ -54,9 +56,6 @@ export default {
       for (let i = 1; i <= len; i++) {
         this.lineNumber += i + '\n'
       }
-    },
-    commandChange () {
-      this.$emit('command-change', this.commandContent)
     },
     run () {
       if (!this.connName) {
@@ -74,21 +73,19 @@ export default {
         return
       }
       if (this.conn) {
-        mysqlClient.query(this.conn, this.command).then((err, data) => {
-          if (err) {
-            this.showMessage(err.message, 'error')
-            this.$message.error('SQL查询错误，请检查SQL格式')
-            this.tableData = null
-            return
-          }
+        mysqlClient.query(this.conn, this.commandContent).then(data => {
           // 如果是 select 语句，则使用表格展示
-          if (this.command.indexOf('select') === 0) {
+          if (this.commandContent.indexOf('select') === 0) {
             store.dispatch('message/setMessage', null)
-            this.tableData = data
+            store.dispatch('main/setTableData', data)
           } else {
-            store.dispatch('message/setMessage', {data: 'OK 执行成功，受影响的行数:' + data.affectedRows, type: 'success'})
-            this.tableData = null
+            store.dispatch('message/setMessage', {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'})
+            store.dispatch('main/setTableData', null)
           }
+        }).catch(err => {
+          console.log(err)
+          store.dispatch('message/setMessage', {title: this.commandContent, data: err.message, type: 'error'})
+          store.dispatch('main/setTableData', null)
         })
       }
     }

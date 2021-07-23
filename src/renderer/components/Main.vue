@@ -5,30 +5,17 @@
         <template>
             <el-tabs type="border-card" v-model="defaultTab" closable @tab-remove="removeTab">
                 <el-tab-pane v-if="showCommand" label="命令行工具" name="command">
-                    <CommandLine @command-change="commandChange"/>
+                    <CommandLine/>
                 </el-tab-pane>
                 <el-tab-pane v-for="(name,index) in tableNames" :key="index"
-                             :label="name" :name="name" >{{name}}</el-tab-pane>
+                             :label="name" :name="name" >
+                    <Message/>
+
+                    <TableData/>
+                </el-tab-pane>
             </el-tabs>
         </template>
 
-        <div class="error-message" v-if="message">
-            <el-alert
-                    :title="message.data"
-                    :type="message.type"
-                    effect="dark">
-            </el-alert>
-        </div>
-        <div class="data" v-if="tableData">
-            <table cellspacing="0">
-                <tr v-for="(row, index) in tableData" v-if="index === 0">
-                    <td class="column-name" v-for="(value, key) of row" :key="key" style="text-align: center;">{{ key }}</td>
-                </tr>
-                <tr v-for="(row, index) in tableData" :key="index">
-                    <td v-for="(value, key) of row" :key="key"><input :value="value | valueFilter"/></td>
-                </tr>
-            </table>
-        </div>
     </div>
 </template>
 
@@ -36,33 +23,19 @@
 import { mapGetters } from 'vuex'
 import CommandLine from '@/components/CommandLine'
 import ConnectionDialog from '@/components/ConnectionDialog'
-import utils from '@/util/utils'
+import Message from '@/components/Message'
+import TableData from '@/components/TableData'
 import store from '@/store'
 
 export default {
   name: 'Main',
-  components: { CommandLine, ConnectionDialog },
+  components: { CommandLine, ConnectionDialog, Message, TableData },
   computed: {
     ...mapGetters([
       'showCommand',
-      'tableNames',
       'defaultTab',
-      'message'
+      'tableNames'
     ])
-  },
-  filters: {
-    valueFilter (value) {
-      if (value instanceof Date) {
-        return utils.dateFormat(value)
-      }
-      return value
-    }
-  },
-  data () {
-    return {
-      command: null,
-      tableData: null
-    }
   },
   methods: {
     removeTab (targetName) {
@@ -71,50 +44,7 @@ export default {
       } else {
         store.dispatch('main/closeTable', targetName)
       }
-    },
-    commandChange (command) {
-      this.command = command
     }
   }
 }
 </script>
-
-<style scoped>
-
-
-
-.error-message {
-    margin-top: 5px;
-}
-.data {
-    height: 300px;
-    margin-top: 5px;
-    overflow-x: scroll;
-    overflow-y: scroll;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    border: 3px solid #67C23A;
-    border-radius: 5px;
-}
-.data table tr td {
-    border: 1px solid black;
-    z-index: 2;
-}
-.data .column-name {
-    position: sticky;
-    top: 0; /* 列首永远固定在头部  */
-    z-index: 1;
-    background-color: #67C23A;
-}
-/*.data table tr td:first-child, .data table tr td:first-child input {*/
-/*    position: sticky;*/
-/*    left: 0; !* 首行永远固定在左侧 *!*/
-/*    z-index: 1;*/
-/*    background-color: #67C23A;*/
-/*}*/
-.data input {
-    text-align: center;
-    width: 90px;
-}
-</style>

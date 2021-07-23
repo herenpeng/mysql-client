@@ -48,21 +48,33 @@ export default {
             reject(err)
           }
           resolve(rows)
-        }
-        )
+        })
       })
     })
+  },
+  queryTable (conn, tableName) {
+    if (tableName) {
+      return new Promise((resolve, reject) => {
+        conn.query('select * from ' + tableName, (err, rows, fields) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(rows)
+        })
+      })
+    }
   },
   query (conn, command) {
     const sqlArr = command.split(';')
     for (let sql of sqlArr) {
       if (sql) {
         return new Promise((resolve, reject) => {
-          conn.query(sql,
-            function (err, rows, fields) {
-              resolve(err, rows)
+          conn.query(sql, (err, rows, fields) => {
+            if (err) {
+              reject(err)
             }
-          )
+            resolve(rows)
+          })
         })
       }
     }

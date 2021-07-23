@@ -2,7 +2,8 @@ const state = {
   showCommand: false,
   databaseName: null,
   tableNames: [],
-  defaultTab: 'command'
+  defaultTab: 'command',
+  tableData: null
 }
 
 const mutations = {
@@ -41,6 +42,9 @@ const mutations = {
         state.defaultTab = state.tableNames[0]
       }
     }
+  },
+  SET_TABLE_DATA (state, tableData) {
+    state.tableData = tableData
   }
 }
 
@@ -62,6 +66,9 @@ const actions = {
   },
   closeTable ({commit}, tableName) {
     commit('DELETE_TABLE_NAME', tableName)
+  },
+  setTableData ({commit}, tableData) {
+    commit('SET_TABLE_DATA', tableData)
   }
 }
 
