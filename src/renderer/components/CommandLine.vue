@@ -29,7 +29,6 @@ export default {
     ...mapGetters([
       'conn',
       'connName',
-      'connIndex',
       'databaseName'
     ])
   },

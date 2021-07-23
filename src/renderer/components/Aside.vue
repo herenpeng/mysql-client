@@ -40,7 +40,6 @@ export default {
     ...mapGetters([
       'connections',
       'conn',
-      'connIndex',
       'databaseName'
     ])
   },
@@ -75,7 +74,6 @@ export default {
         if (conn !== null) {
           store.dispatch('connection/openConn', conn)
           store.dispatch('connection/setConnName', connection.name)
-          store.dispatch('connection/setConnIndex', index)
           mysqlClient.showDatabases(conn).then(data => {
             if (data !== null) {
               this.databases = data

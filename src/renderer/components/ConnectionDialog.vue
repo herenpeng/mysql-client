@@ -1,6 +1,6 @@
 <template>
     <el-dialog
-            :title="dialogTitle"
+            :title="updateIndex===-1?'创建链接':'更新链接'"
             :visible.sync="dialogVisible"
             width="50%"
             @open="openDialog"
@@ -41,7 +41,6 @@ export default {
   computed: {
     ...mapGetters([
       'connections',
-      'dialogTitle',
       'dialogVisible',
       'updateIndex'
     ])

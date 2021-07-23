@@ -1,11 +1,9 @@
 const state = {
   connections: null,
   dialogVisible: false,
-  dialogTitle: '创建链接',
   updateIndex: -1,
   conn: null,
-  connName: null,
-  connIndex: -1
+  connName: null
 }
 
 const mutations = {
@@ -22,11 +20,9 @@ const mutations = {
   },
   OPEN_CREATE_DIALOG (state) {
     state.dialogVisible = true
-    state.dialogTitle = '创建链接'
   },
   OPEN_UPDATE_DIALOG (state, updateIndex) {
     state.dialogVisible = true
-    state.dialogTitle = '更新链接'
     state.updateIndex = updateIndex
   },
   CLOSE_DIALOG (state) {
@@ -40,13 +36,9 @@ const mutations = {
   CLOSE_CONN (state) {
     state.conn = null
     state.connName = null
-    state.connIndex = -1
   },
   SET_CONN_NAME (state, connName) {
     state.connName = connName
-  },
-  SET_CONN_INDEX (state, connIndex) {
-    state.connIndex = connIndex
   }
 }
 
@@ -100,9 +92,6 @@ const actions = {
   },
   setConnName ({commit}, connName) {
     commit('SET_CONN_NAME', connName)
-  },
-  setConnIndex ({commit}, connIndex) {
-    commit('SET_CONN_INDEX', connIndex)
   }
 }
 
