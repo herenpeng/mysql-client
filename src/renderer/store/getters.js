@@ -6,8 +6,10 @@ const getters = {
   conn: state => state.connection.conn,
   connName: state => state.connection.connName,
   connIndex: state => state.connection.connIndex,
-  showCommand: state => state.command.showCommand,
-  databaseName: state => state.database.databaseName,
+  showCommand: state => state.main.showCommand,
+  databaseName: state => state.main.databaseName,
+  tableNames: state => state.main.tableNames,
+  defaultTab: state => state.main.defaultTab,
   message: state => state.message.message
 }
 export default getters

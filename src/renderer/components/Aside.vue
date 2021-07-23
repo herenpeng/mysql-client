@@ -1,12 +1,12 @@
 <template>
 <div class="aside">
     <el-menu
-            class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
             background-color="#545c64"
             text-color="#fff"
-            active-text-color="#ffd04b">
+            active-text-color="#ffd04b"
+            unique-opened="true">
         <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
             <template slot="title">
                 <span>{{ conn.name }}</span>
@@ -20,7 +20,7 @@
                         :key="databaseIndex" :index="database.Database" >
                 <template slot="title">{{ database.Database }}</template>
                 <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
-                              :index="table.TABLE_NAME">{{ table.TABLE_NAME }}</el-menu-item>
+                              :index="table.TABLE_NAME" @click="openTable(table.TABLE_NAME)">{{ table.TABLE_NAME }}</el-menu-item>
             </el-submenu>
         </el-submenu>
     </el-menu>
@@ -32,7 +32,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import store from '@/store'
-import dataSource from '@/util/dataSource'
+import mysqlClient from '@/util/mysqlClient'
 
 export default {
   name: 'Aside',
@@ -71,12 +71,12 @@ export default {
     },
     openConn (index) {
       const connection = this.connections[index]
-      dataSource.getConn(connection).then(conn => {
+      mysqlClient.getConn(connection).then(conn => {
         if (conn !== null) {
           store.dispatch('connection/openConn', conn)
           store.dispatch('connection/setConnName', connection.name)
           store.dispatch('connection/setConnIndex', index)
-          dataSource.showDatabases(conn).then(data => {
+          mysqlClient.showDatabases(conn).then(data => {
             if (data !== null) {
               this.databases = data
             }
@@ -91,22 +91,25 @@ export default {
       })
     },
     closeConn () {
-      dataSource.closeConn(this.conn)
+      mysqlClient.closeConn(this.conn)
       store.dispatch('connection/closeConn')
       this.databases = null
     },
     closeDatabase () {
-      store.dispatch('database/closeDatabase')
+      store.dispatch('main/closeDatabase')
       this.tables = null
     },
     showTables (databaseName) {
-      store.dispatch('database/setDatabaseName', databaseName)
-      dataSource.showTables(this.conn, this.databaseName).then((data) => {
+      store.dispatch('main/setDatabaseName', databaseName)
+      mysqlClient.showTables(this.conn, this.databaseName).then((data) => {
         this.tables = data
       }).catch(err => {
         console.log(err)
         this.$message.error('查看数据库表错误')
       })
+    },
+    openTable (tableName) {
+      store.dispatch('main/openTable', tableName)
     },
     openUpdateDialog (updateIndex) {
       store.dispatch('connection/openUpdateDialog', updateIndex)

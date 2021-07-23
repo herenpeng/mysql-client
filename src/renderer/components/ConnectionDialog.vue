@@ -33,7 +33,7 @@
 
 <script>
 import store from '@/store'
-import dataSource from '@/util/dataSource'
+import mysqlClient from '@/util/mysqlClient'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -66,7 +66,7 @@ export default {
       }
     },
     testConnection () {
-      dataSource.getConn(this.connection).then(conn => {
+      mysqlClient.getConn(this.connection).then(conn => {
         if (conn !== null) {
           this.$message({
             type: 'success',

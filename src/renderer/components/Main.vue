@@ -1,8 +1,16 @@
 <template>
     <div>
-        <CommandLine v-if="showCommand" @command-change="commandChange"/>
-
         <ConnectionDialog/>
+
+        <template>
+            <el-tabs type="border-card" v-model="defaultTab" closable @tab-remove="removeTab">
+                <el-tab-pane v-if="showCommand" label="命令行工具" name="command">
+                    <CommandLine @command-change="commandChange"/>
+                </el-tab-pane>
+                <el-tab-pane v-for="(name,index) in tableNames" :key="index"
+                             :label="name" :name="name" >{{name}}</el-tab-pane>
+            </el-tabs>
+        </template>
 
         <div class="error-message" v-if="message">
             <el-alert
@@ -29,6 +37,7 @@ import { mapGetters } from 'vuex'
 import CommandLine from '@/components/CommandLine'
 import ConnectionDialog from '@/components/ConnectionDialog'
 import utils from '@/util/utils'
+import store from '@/store'
 
 export default {
   name: 'Main',
@@ -36,6 +45,8 @@ export default {
   computed: {
     ...mapGetters([
       'showCommand',
+      'tableNames',
+      'defaultTab',
       'message'
     ])
   },
@@ -54,6 +65,13 @@ export default {
     }
   },
   methods: {
+    removeTab (targetName) {
+      if (targetName === 'command') {
+        store.dispatch('main/closeCommand')
+      } else {
+        store.dispatch('main/closeTable', targetName)
+      }
+    },
     commandChange (command) {
       this.command = command
     }

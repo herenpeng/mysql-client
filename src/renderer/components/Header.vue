@@ -1,6 +1,5 @@
 <template>
     <el-menu
-            class="el-menu-demo"
             mode="horizontal"
             @select="handleSelect"
             background-color="#545c64"
@@ -25,7 +24,7 @@ export default {
       store.dispatch('connection/openCreateDialog')
     },
     openCommand () {
-      store.dispatch('command/openCommand')
+      store.dispatch('main/openCommand')
     }
   }
 }

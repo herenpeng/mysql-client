@@ -1,13 +1,13 @@
 <template>
-  <el-container>
+  <el-container class="wrap-container">
     <el-header style="padding: 0;">
       <Header/>
     </el-header>
     <el-container>
-      <el-aside width="300px">
+      <el-aside class="aside-connection">
         <Aside/>
       </el-aside>
-      <el-main>
+      <el-main style="padding: 0;">
         <Main/>
       </el-main>
     </el-container>
@@ -26,4 +26,23 @@ export default {
 </script>
 
 <style>
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+.wrap-container {
+  height: 100%;
+}
+.aside-connection {
+  height: 100%;
+  width: 300px;
+  border-right: 1px solid #e4e0e0;
+}
 </style>
