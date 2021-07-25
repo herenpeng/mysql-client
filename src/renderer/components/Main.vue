@@ -9,9 +9,9 @@
                 </el-tab-pane>
                 <el-tab-pane v-for="(name,index) in tableNames" :key="index"
                              :label="name" :name="name" >
-                    <Message/>
+                    <Message :name="name"/>
 
-                    <TableData/>
+                    <TableData :tableName="name"/>
                 </el-tab-pane>
             </el-tabs>
         </template>
@@ -43,6 +43,7 @@ export default {
         store.dispatch('main/closeCommand')
       } else {
         store.dispatch('main/closeTable', targetName)
+        store.dispatch('message/setMessage', targetName, null)
       }
     }
   }

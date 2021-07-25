@@ -3,7 +3,7 @@ const state = {
   databaseName: null,
   tableNames: [],
   defaultTab: 'command',
-  tableData: null
+  tableData: {}
 }
 
 const mutations = {
@@ -33,6 +33,7 @@ const mutations = {
     state.tableNames.forEach((table, index) => {
       if (table === tableName) {
         state.tableNames.splice(index, 1)
+        state.tableData[tableName] = null
       }
     })
     if (state.defaultTab === tableName) {
@@ -43,8 +44,8 @@ const mutations = {
       }
     }
   },
-  SET_TABLE_DATA (state, tableData) {
-    state.tableData = tableData
+  SET_TABLE_DATA (state, tableName, tableData) {
+    state.tableData[tableName] = tableData
   }
 }
 
@@ -67,8 +68,8 @@ const actions = {
   closeTable ({commit}, tableName) {
     commit('DELETE_TABLE_NAME', tableName)
   },
-  setTableData ({commit}, tableData) {
-    commit('SET_TABLE_DATA', tableData)
+  setTableData ({commit}, tableName, tableData) {
+    commit('SET_TABLE_DATA', tableName, tableData)
   }
 }
 

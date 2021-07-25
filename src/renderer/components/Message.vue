@@ -1,9 +1,9 @@
 <template>
-    <div class="message" v-if="message">
+    <div class="message" v-if="message[name]">
         <el-alert
-                :title="message.title"
-                :type="message.type"
-                :description="message.data"
+                :title="message[name].title"
+                :type="message[name].type"
+                :description="message[name].data"
                 effect="dark"
                 show-icon
                 @close="closeAlert">
@@ -17,6 +17,12 @@ import store from '@/store'
 
 export default {
   name: 'Message',
+  props: {
+    name: {
+      type: String,
+      default: 'default'
+    }
+  },
   computed: {
     ...mapGetters([
       'message'
@@ -24,7 +30,7 @@ export default {
   },
   methods: {
     closeAlert () {
-      store.dispatch('message/setMessage', null)
+      store.dispatch('message/setMessage', name, null)
     }
   }
 }

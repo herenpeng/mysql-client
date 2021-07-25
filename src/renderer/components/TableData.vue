@@ -1,7 +1,7 @@
 <template>
     <div class="table-data" v-if="tableData">
         <table cellspacing="0">
-            <tr v-for="(row, index) in tableData" v-if="index === 0">
+            <tr v-for="(row, index) in tableData[tableName]" v-if="index === 0">
                 <td class="column-name" v-for="(value, key) of row" :key="key" style="text-align: center;">{{ key }}</td>
             </tr>
             <tr v-for="(row, index) in tableData" :key="index">
@@ -17,6 +17,12 @@ import utils from '@/util/utils'
 
 export default {
   name: 'TableData',
+  props: {
+    tableName: {
+      type: String,
+      default: 'default'
+    }
+  },
   computed: {
     ...mapGetters([
       'tableData'

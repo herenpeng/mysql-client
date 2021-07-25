@@ -6,7 +6,7 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
-            unique-opened="true">
+            unique-opened="unique-opened">
         <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
             <template slot="title">
                 <span>{{ conn.name }}</span>
@@ -17,7 +17,7 @@
                 </div>
             </template>
             <el-submenu v-if="databases" v-for="(database, databaseIndex) in databases"
-                        :key="databaseIndex" :index="database.Database" >
+                        :key="databaseIndex" :index="database.Database">
                 <template slot="title">{{ database.Database }}</template>
                 <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
                               :index="table.TABLE_NAME" @click="openTable(table.TABLE_NAME)">{{ table.TABLE_NAME }}</el-menu-item>
@@ -109,12 +109,12 @@ export default {
     openTable (tableName) {
       store.dispatch('main/openTable', tableName)
       mysqlClient.queryTable(this.conn, tableName).then(data => {
-        store.dispatch('message/setMessage', null)
-        store.dispatch('main/setTableData', data)
+        store.dispatch('message/setMessage', tableName, null)
+        store.dispatch('main/setTableData', tableName, data)
       }).catch(err => {
         console.log(err)
-        store.dispatch('message/setMessage', {title: this.commandContent, data: err.message, type: 'error'})
-        store.dispatch('main/setTableData', null)
+        store.dispatch('message/setMessage', tableName, {title: this.commandContent, data: err.message, type: 'error'})
+        store.dispatch('main/setTableData', tableName, null)
       })
     },
     openUpdateDialog (updateIndex) {

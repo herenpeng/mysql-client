@@ -16,9 +16,9 @@
                       class="command-content"></textarea>
         </div>
 
-        <Message/>
+        <Message :name="'command'"/>
 
-        <TableData/>
+        <TableData :tableName="'command'"/>
     </div>
 </template>
 
@@ -76,16 +76,16 @@ export default {
         mysqlClient.query(this.conn, this.commandContent).then(data => {
           // 如果是 select 语句，则使用表格展示
           if (this.commandContent.indexOf('select') === 0) {
-            store.dispatch('message/setMessage', null)
-            store.dispatch('main/setTableData', data)
+            store.dispatch('message/setMessage', 'command', null)
+            store.dispatch('main/setTableData', 'command', data)
           } else {
-            store.dispatch('message/setMessage', {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'})
-            store.dispatch('main/setTableData', null)
+            store.dispatch('message/setMessage', 'command', {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'})
+            store.dispatch('main/setTableData', 'command', null)
           }
         }).catch(err => {
           console.log(err)
-          store.dispatch('message/setMessage', {title: this.commandContent, data: err.message, type: 'error'})
-          store.dispatch('main/setTableData', null)
+          store.dispatch('message/setMessage', 'command', {title: this.commandContent, data: err.message, type: 'error'})
+          store.dispatch('main/setTableData', 'command', null)
         })
       }
     }
