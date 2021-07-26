@@ -1,9 +1,9 @@
 <template>
-    <div class="message" v-if="message[name]">
+    <div class="message" v-if="message[defaultTab]">
         <el-alert
-                :title="message[name].title"
-                :type="message[name].type"
-                :description="message[name].data"
+                :title="message[defaultTab].title"
+                :type="message[defaultTab].type"
+                :description="message[defaultTab].data"
                 effect="dark"
                 show-icon
                 @close="closeAlert">
@@ -17,15 +17,10 @@ import store from '@/store'
 
 export default {
   name: 'Message',
-  props: {
-    name: {
-      type: String,
-      default: 'default'
-    }
-  },
   computed: {
     ...mapGetters([
-      'message'
+      'message',
+      'defaultTab'
     ])
   },
   methods: {

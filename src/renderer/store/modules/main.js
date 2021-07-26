@@ -15,6 +15,8 @@ const mutations = {
     state.showCommand = false
     if (state.tableNames.length > 0) {
       state.defaultTab = state.tableNames[0]
+    } else {
+      state.defaultTab = 'command'
     }
   },
   SET_DATABASE_NAME (state, databaseName) {
@@ -37,10 +39,10 @@ const mutations = {
       }
     })
     if (state.defaultTab === tableName) {
-      if (state.showCommand) {
-        state.defaultTab = 'command'
-      } else if (state.tableNames.length > 0) {
+      if (state.tableNames.length > 0) {
         state.defaultTab = state.tableNames[0]
+      } else {
+        state.defaultTab = 'command'
       }
     }
   },

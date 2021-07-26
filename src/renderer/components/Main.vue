@@ -9,9 +9,9 @@
                 </el-tab-pane>
                 <el-tab-pane v-for="(name,index) in tableNames" :key="index"
                              :label="name" :name="name" >
-                    <Message :name="name"/>
+                    <Message/>
 
-                    <TableData :tableName="name"/>
+                    <TableData/>
                 </el-tab-pane>
             </el-tabs>
         </template>
