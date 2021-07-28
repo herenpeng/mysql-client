@@ -3,7 +3,7 @@
         <ConnectionDialog/>
 
         <template>
-            <el-tabs type="border-card" v-model="defaultTab" closable @tab-remove="removeTab">
+            <el-tabs type="border-card" v-model="currentTab" closable @tab-remove="removeTab">
                 <el-tab-pane v-if="showCommand" label="命令行工具" name="command">
                     <CommandLine/>
                 </el-tab-pane>
@@ -33,17 +33,17 @@ export default {
   computed: {
     ...mapGetters([
       'showCommand',
-      'defaultTab',
+      'currentTab',
       'tableNames'
     ])
   },
   methods: {
-    removeTab (targetName) {
-      if (targetName === 'command') {
+    removeTab (tabName) {
+      if (tabName === 'command') {
         store.dispatch('main/closeCommand')
       } else {
-        store.dispatch('main/closeTable', targetName)
-        store.dispatch('message/setMessage', targetName, null)
+        store.dispatch('main/closeTable', tabName)
+        store.dispatch('message/setMessage', {tabName: tabName})
       }
     }
   }

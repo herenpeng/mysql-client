@@ -7,7 +7,7 @@ const getters = {
   showCommand: state => state.main.showCommand,
   databaseName: state => state.main.databaseName,
   tableNames: state => state.main.tableNames,
-  defaultTab: state => state.main.defaultTab,
+  currentTab: state => state.main.currentTab,
   tableData: state => state.main.tableData,
   message: state => state.message.message
 }

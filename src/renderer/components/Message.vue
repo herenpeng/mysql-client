@@ -1,9 +1,9 @@
 <template>
-    <div class="message" v-if="message[defaultTab]">
+    <div class="message" v-if="message[currentTab]">
         <el-alert
-                :title="message[defaultTab].title"
-                :type="message[defaultTab].type"
-                :description="message[defaultTab].data"
+                :title="message[currentTab].title"
+                :type="message[currentTab].type"
+                :description="message[currentTab].data"
                 effect="dark"
                 show-icon
                 @close="closeAlert">
@@ -20,12 +20,12 @@ export default {
   computed: {
     ...mapGetters([
       'message',
-      'defaultTab'
+      'currentTab'
     ])
   },
   methods: {
     closeAlert () {
-      store.dispatch('message/setMessage', name, null)
+      store.dispatch('message/setMessage', {tabName: this.currentTab})
     }
   }
 }

@@ -109,12 +109,12 @@ export default {
     openTable (tableName) {
       store.dispatch('main/openTable', tableName)
       mysqlClient.queryTable(this.conn, tableName).then(data => {
-        store.dispatch('message/setMessage', tableName, null)
-        store.dispatch('main/setTableData', tableName, data)
+        store.dispatch('message/setMessage', {tabName: tableName})
+        store.dispatch('main/setTableData', {tableName: tableName, tableData: data})
       }).catch(err => {
         console.log(err)
-        store.dispatch('message/setMessage', tableName, {title: this.commandContent, data: err.message, type: 'error'})
-        store.dispatch('main/setTableData', tableName, null)
+        store.dispatch('message/setMessage', {tabName: tableName, message: {title: this.commandContent, data: err.message, type: 'error'}})
+        store.dispatch('main/setTableData', {tableName: tableName})
       })
     },
     openUpdateDialog (updateIndex) {

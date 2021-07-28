@@ -1,22 +1,23 @@
 const state = {
   showCommand: false,
   databaseName: null,
-  tableNames: [],
-  defaultTab: 'command',
-  tableData: {}
+  tabNames: [],
+  currentTab: 'command',
+  tableDataMap: {},
+  tableData: null
 }
 
 const mutations = {
   OPEN_COMMAND (state) {
     state.showCommand = true
-    state.defaultTab = 'command'
+    state.currentTab = 'command'
   },
   CLOSE_COMMAND (state) {
     state.showCommand = false
-    if (state.tableNames.length > 0) {
-      state.defaultTab = state.tableNames[0]
+    if (state.tabNames.length > 0) {
+      state.currentTab = state.tabNames[0]
     } else {
-      state.defaultTab = 'command'
+      state.currentTab = 'command'
     }
   },
   SET_DATABASE_NAME (state, databaseName) {
@@ -26,28 +27,28 @@ const mutations = {
     state.databaseName = null
   },
   ADD_TABLE_NAME (state, tableName) {
-    if (state.tableNames.indexOf(tableName) === -1) {
-      state.tableNames.push(tableName)
+    if (state.tabNames.indexOf(tableName) === -1) {
+      state.tabNames.push(tableName)
     }
-    state.defaultTab = tableName
+    state.currentTab = tableName
   },
   DELETE_TABLE_NAME (state, tableName) {
-    state.tableNames.forEach((table, index) => {
+    state.tabNames.forEach((table, index) => {
       if (table === tableName) {
-        state.tableNames.splice(index, 1)
-        state.tableData[tableName] = null
+        state.tabNames.splice(index, 1)
+        state.tableDataMap[tableName] = null
       }
     })
-    if (state.defaultTab === tableName) {
-      if (state.tableNames.length > 0) {
-        state.defaultTab = state.tableNames[0]
+    if (state.currentTab === tableName) {
+      if (state.tabNames.length > 0) {
+        state.currentTab = state.tabNames[0]
       } else {
-        state.defaultTab = 'command'
+        state.currentTab = 'command'
       }
     }
   },
-  SET_TABLE_DATA (state, tableName, tableData) {
-    state.tableData[tableName] = tableData
+  SET_TABLE_DATA (state, {tableName, tableData}) {
+    state.tableDataMap[tableName] = tableData
   }
 }
 
@@ -70,8 +71,8 @@ const actions = {
   closeTable ({commit}, tableName) {
     commit('DELETE_TABLE_NAME', tableName)
   },
-  setTableData ({commit}, tableName, tableData) {
-    commit('SET_TABLE_DATA', tableName, tableData)
+  setTableData ({commit}, {tableName, tableData}) {
+    commit('SET_TABLE_DATA', {tableName, tableData})
   }
 }
 

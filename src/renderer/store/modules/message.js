@@ -3,14 +3,14 @@ const state = {
 }
 
 const mutations = {
-  SET_MESSAGE (state, tableName, message) {
-    state.message[tableName] = message
+  SET_MESSAGE (state, tabName, message) {
+    state.message[tabName] = message
   }
 }
 
 const actions = {
-  setMessage ({commit}, tableName, message) {
-    commit('SET_MESSAGE', tableName, message)
+  setMessage ({commit}, {tabName, message}) {
+    commit('SET_MESSAGE', tabName, message)
   }
 }
 
