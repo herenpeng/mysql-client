@@ -20,7 +20,7 @@
                         :key="databaseIndex" :index="database.Database">
                 <template slot="title">{{ database.Database }}</template>
                 <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
-                              :index="table.TABLE_NAME" @click="openTable(table.TABLE_NAME)">{{ table.TABLE_NAME }}</el-menu-item>
+                              :index="table.TABLE_NAME" @click="openTab(table.TABLE_NAME)">{{ table.TABLE_NAME }}</el-menu-item>
             </el-submenu>
         </el-submenu>
     </el-menu>
@@ -106,15 +106,13 @@ export default {
         this.$message.error('查看数据库表错误')
       })
     },
-    openTable (tableName) {
-      store.dispatch('main/openTable', tableName)
-      mysqlClient.queryTable(this.conn, tableName).then(data => {
-        store.dispatch('message/setMessage', {tabName: tableName})
-        store.dispatch('main/setTableData', {tableName: tableName, tableData: data})
+    openTab (tabName) {
+      mysqlClient.queryTable(this.conn, tabName).then(data => {
+        store.dispatch('main/openTab', tabName)
+        store.dispatch('message/setMessage', {tabName: tabName})
+        store.dispatch('main/setTableData', {tabName: tabName, tableData: data})
       }).catch(err => {
         console.log(err)
-        store.dispatch('message/setMessage', {tabName: tableName, message: {title: this.commandContent, data: err.message, type: 'error'}})
-        store.dispatch('main/setTableData', {tableName: tableName})
       })
     },
     openUpdateDialog (updateIndex) {

@@ -3,11 +3,11 @@
         <ConnectionDialog/>
 
         <template>
-            <el-tabs type="border-card" v-model="currentTab" closable @tab-remove="removeTab">
+            <el-tabs type="border-card" :value="currentTab" closable @tab-click="clickTab" @tab-remove="removeTab">
                 <el-tab-pane v-if="showCommand" label="命令行工具" name="command">
                     <CommandLine/>
                 </el-tab-pane>
-                <el-tab-pane v-for="(name,index) in tableNames" :key="index"
+                <el-tab-pane v-for="(name,index) in tabNames" :key="index"
                              :label="name" :name="name" >
                     <Message/>
 
@@ -34,15 +34,18 @@ export default {
     ...mapGetters([
       'showCommand',
       'currentTab',
-      'tableNames'
+      'tabNames'
     ])
   },
   methods: {
+    clickTab (tab) {
+      store.dispatch('main/openTab', tab.name)
+    },
     removeTab (tabName) {
       if (tabName === 'command') {
         store.dispatch('main/closeCommand')
       } else {
-        store.dispatch('main/closeTable', tabName)
+        store.dispatch('main/closeTab', tabName)
         store.dispatch('message/setMessage', {tabName: tabName})
       }
     }

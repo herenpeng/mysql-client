@@ -3,8 +3,7 @@ const state = {
   databaseName: null,
   tabNames: [],
   currentTab: 'command',
-  tableDataMap: {},
-  tableData: null
+  tableData: {}
 }
 
 const mutations = {
@@ -26,20 +25,20 @@ const mutations = {
   CLOSE_DATABASE (state) {
     state.databaseName = null
   },
-  ADD_TABLE_NAME (state, tableName) {
-    if (state.tabNames.indexOf(tableName) === -1) {
-      state.tabNames.push(tableName)
+  ADD_TAB_NAME (state, tabName) {
+    if (state.tabNames.indexOf(tabName) === -1) {
+      state.tabNames.push(tabName)
     }
-    state.currentTab = tableName
+    state.currentTab = tabName
   },
-  DELETE_TABLE_NAME (state, tableName) {
-    state.tabNames.forEach((table, index) => {
-      if (table === tableName) {
+  DELETE_TAB_NAME (state, tabName) {
+    state.tabNames.forEach((tab, index) => {
+      if (tab === tabName) {
         state.tabNames.splice(index, 1)
-        state.tableDataMap[tableName] = null
+        state.tableData[tabName] = null
       }
     })
-    if (state.currentTab === tableName) {
+    if (state.currentTab === tabName) {
       if (state.tabNames.length > 0) {
         state.currentTab = state.tabNames[0]
       } else {
@@ -47,8 +46,8 @@ const mutations = {
       }
     }
   },
-  SET_TABLE_DATA (state, {tableName, tableData}) {
-    state.tableDataMap[tableName] = tableData
+  SET_TABLE_DATA (state, {tabName, tableData}) {
+    state.tableData[tabName] = tableData
   }
 }
 
@@ -65,14 +64,15 @@ const actions = {
   closeDatabase ({commit}) {
     commit('CLOSE_DATABASE')
   },
-  openTable ({commit}, tableName) {
-    commit('ADD_TABLE_NAME', tableName)
+  openTab ({commit}, tabName) {
+    commit('ADD_TAB_NAME', tabName)
   },
-  closeTable ({commit}, tableName) {
-    commit('DELETE_TABLE_NAME', tableName)
+  closeTab ({commit}, tabName) {
+    commit('DELETE_TAB_NAME', tabName)
   },
-  setTableData ({commit}, {tableName, tableData}) {
-    commit('SET_TABLE_DATA', {tableName, tableData})
+
+  setTableData ({commit}, {tabName, tableData}) {
+    commit('SET_TABLE_DATA', {tabName, tableData})
   }
 }
 

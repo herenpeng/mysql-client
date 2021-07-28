@@ -1,10 +1,10 @@
 <template>
-    <div class="table-data" v-if="tableData">
+    <div class="table-data" v-if="tableData[currentTab]">
         <table cellspacing="0">
             <tr v-for="(row, index) in tableData[currentTab]" v-if="index === 0">
                 <td class="column-name" v-for="(value, key) of row" :key="key" style="text-align: center;">{{ key }}</td>
             </tr>
-            <tr v-for="(row, index) in tableData" :key="index">
+            <tr v-for="(row, index) in tableData[currentTab]" :key="index">
                 <td v-for="(value, key) of row" :key="key"><input :value="value | valueFilter"/></td>
             </tr>
         </table>

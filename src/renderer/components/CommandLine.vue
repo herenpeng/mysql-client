@@ -16,9 +16,9 @@
                       class="command-content"></textarea>
         </div>
 
-        <Message :name="'command'"/>
+        <Message/>
 
-        <TableData :tableName="'command'"/>
+        <TableData/>
     </div>
 </template>
 
@@ -77,15 +77,15 @@ export default {
           // 如果是 select 语句，则使用表格展示
           if (this.commandContent.indexOf('select') === 0) {
             store.dispatch('message/setMessage', {tabName: 'command'})
-            store.dispatch('main/setTableData', {tableName: 'command', tableData: data})
+            store.dispatch('main/setTableData', {tabName: 'command', tableData: data})
           } else {
             store.dispatch('message/setMessage', {tabName: 'command', message: {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'}})
-            store.dispatch('main/setTableData', {tableName: 'command'})
+            store.dispatch('main/setTableData', {tabName: 'command'})
           }
         }).catch(err => {
           console.log(err)
           store.dispatch('message/setMessage', {tabName: 'command', message: {title: this.commandContent, data: err.message, type: 'error'}})
-          store.dispatch('main/setTableData', {tableName: 'command'})
+          store.dispatch('main/setTableData', {tabName: 'command'})
         })
       }
     }
