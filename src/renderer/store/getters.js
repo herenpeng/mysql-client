@@ -4,11 +4,8 @@ const getters = {
   updateIndex: state => state.connection.updateIndex,
   conn: state => state.connection.conn,
   connName: state => state.connection.connName,
-  showCommand: state => state.main.showCommand,
   databaseName: state => state.main.databaseName,
-  tabNames: state => state.main.tabNames,
-  currentTab: state => state.main.currentTab,
-  tableData: state => state.main.tableData,
-  message: state => state.message.message
+  tabMap: state => state.tab.tabMap,
+  currentTab: state => state.tab.currentTab
 }
 export default getters

@@ -1,10 +1,10 @@
 <template>
-    <div class="table-data" v-if="tableData[currentTab]">
+    <div class="table-data" v-if="currentTab.tableData">
         <table cellspacing="0">
-            <tr v-for="(row, index) in tableData[currentTab]" v-if="index === 0">
+            <tr v-for="(row, index) in currentTab.tableData" v-if="index === 0">
                 <td class="column-name" v-for="(value, key) of row" :key="key" style="text-align: center;">{{ key }}</td>
             </tr>
-            <tr v-for="(row, index) in tableData[currentTab]" :key="index">
+            <tr v-for="(row, index) in currentTab.tableData" :key="index">
                 <td v-for="(value, key) of row" :key="key"><input :value="value | valueFilter"/></td>
             </tr>
         </table>
@@ -19,7 +19,6 @@ export default {
   name: 'TableData',
   computed: {
     ...mapGetters([
-      'tableData',
       'currentTab'
     ])
   },

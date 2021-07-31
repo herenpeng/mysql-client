@@ -15,10 +15,6 @@
             <textarea @input="handleTextareaInput" v-model="commandContent"
                       class="command-content"></textarea>
         </div>
-
-        <Message/>
-
-        <TableData/>
     </div>
 </template>
 
@@ -76,16 +72,13 @@ export default {
         mysqlClient.query(this.conn, this.commandContent).then(data => {
           // 如果是 select 语句，则使用表格展示
           if (this.commandContent.indexOf('select') === 0) {
-            store.dispatch('message/setMessage', {tabName: 'command'})
-            store.dispatch('main/setTableData', {tabName: 'command', tableData: data})
+            store.dispatch('tab/openTab', {tabName: 'command', tableData: data})
           } else {
-            store.dispatch('message/setMessage', {tabName: 'command', message: {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'}})
-            store.dispatch('main/setTableData', {tabName: 'command'})
+            store.dispatch('tab/openTab', {tabName: 'command', message: {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'}})
           }
         }).catch(err => {
           console.log(err)
-          store.dispatch('message/setMessage', {tabName: 'command', message: {title: this.commandContent, data: err.message, type: 'error'}})
-          store.dispatch('main/setTableData', {tabName: 'command'})
+          store.dispatch('tab/openTab', {tabName: 'command', message: {title: this.commandContent, data: err.message, type: 'error'}})
         })
       }
     }

@@ -108,11 +108,10 @@ export default {
     },
     openTab (tabName) {
       mysqlClient.queryTable(this.conn, tabName).then(data => {
-        store.dispatch('main/openTab', tabName)
-        store.dispatch('message/setMessage', {tabName: tabName})
-        store.dispatch('main/setTableData', {tabName: tabName, tableData: data})
+        store.dispatch('tab/openTab', {tabName: tabName, tableData: data})
       }).catch(err => {
         console.log(err)
+        store.dispatch('tab/openTab', {tabName: tabName, message: {title: this.commandContent, data: err.message, type: 'error'}})
       })
     },
     openUpdateDialog (updateIndex) {

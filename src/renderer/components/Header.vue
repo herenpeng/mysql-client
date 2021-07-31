@@ -24,7 +24,7 @@ export default {
       store.dispatch('connection/openCreateDialog')
     },
     openCommand () {
-      store.dispatch('main/openCommand')
+      store.dispatch('tab/openTab', {tabName: 'command'})
     }
   }
 }

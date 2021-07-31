@@ -3,12 +3,11 @@
         <ConnectionDialog/>
 
         <template>
-            <el-tabs type="border-card" :value="currentTab" closable @tab-click="clickTab" @tab-remove="removeTab">
-                <el-tab-pane v-if="showCommand" label="命令行工具" name="command">
-                    <CommandLine/>
-                </el-tab-pane>
-                <el-tab-pane v-for="(name,index) in tabNames" :key="index"
-                             :label="name" :name="name" >
+            <el-tabs type="border-card" v-model="currentTab.tabName" closable @tab-click="clickTab" @tab-remove="removeTab">
+                <el-tab-pane v-for="(value, name,index) in tabMap" :key="index"
+                             :label="name==='command'?'命令行工具':name" :name="name" >
+                    <CommandLine v-if="name==='command'"/>
+
                     <Message/>
 
                     <TableData/>
@@ -32,22 +31,20 @@ export default {
   components: { CommandLine, ConnectionDialog, Message, TableData },
   computed: {
     ...mapGetters([
-      'showCommand',
-      'currentTab',
-      'tabNames'
+      'tabMap',
+      'currentTab'
     ])
+  },
+  created () {
+    console.log(JSON.stringify(this.currentTab))
+    this.tabName = this.currentTab.tabName
   },
   methods: {
     clickTab (tab) {
-      store.dispatch('main/openTab', tab.name)
+      store.dispatch('tab/openTab', {tabName: tab.name})
     },
     removeTab (tabName) {
-      if (tabName === 'command') {
-        store.dispatch('main/closeCommand')
-      } else {
-        store.dispatch('main/closeTab', tabName)
-        store.dispatch('message/setMessage', {tabName: tabName})
-      }
+      store.dispatch('tab/closeTab', tabName)
     }
   }
 }
