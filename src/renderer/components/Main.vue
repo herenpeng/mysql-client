@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     clickTab (tab) {
-      store.dispatch('tab/openTab', {tabName: tab.name})
+      store.dispatch('tab/clickTab', tab.name)
     },
     removeTab (tabName) {
       store.dispatch('tab/closeTab', tabName)

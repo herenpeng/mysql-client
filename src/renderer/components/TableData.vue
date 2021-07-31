@@ -35,13 +35,8 @@ export default {
 
 <style scoped>
 .table-data {
-    height: 300px;
-    margin-top: 5px;
-    overflow-x: scroll;
-    overflow-y: scroll;
-    bottom: 0;
-    right: 0;
-    left: 0;
+    height: 675px;
+    overflow: scroll;
     border: 3px solid #67C23A;
     border-radius: 5px;
 }
@@ -55,12 +50,6 @@ export default {
     z-index: 1;
     background-color: #67C23A;
 }
-/*.table-data table tr td:first-child, .data table tr td:first-child input {*/
-/*    position: sticky;*/
-/*    left: 0; !* 首行永远固定在左侧 *!*/
-/*    z-index: 1;*/
-/*    background-color: #67C23A;*/
-/*}*/
 .table-data input {
     text-align: center;
     width: 90px;

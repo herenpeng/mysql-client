@@ -11,7 +11,6 @@
             <template slot="title">
                 <span>{{ conn.name }}</span>
                 <div style="float: right;margin-right: 15px;">
-                    <i class="el-icon-refresh" @click="openConn(index)"></i>
                     <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
                     <i class="el-icon-delete" @click="deleteConnection(index)"></i>
                 </div>
@@ -142,9 +141,7 @@ export default {
 
 <style scoped>
 .aside {
-    overflow: hidden;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height: 700px;
+    overflow: scroll;
+    height: 750px;
 }
 </style>
