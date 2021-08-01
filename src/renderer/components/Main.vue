@@ -4,9 +4,9 @@
 
         <template>
             <el-tabs type="border-card" v-model="currentTab.tabName" closable @tab-click="clickTab" @tab-remove="removeTab">
-                <el-tab-pane v-for="(value, name,index) in tabMap" :key="index"
-                             :label="name==='command'?'命令行工具':name" :name="name" >
-                    <CommandLine v-if="name==='command'"/>
+                <el-tab-pane v-for="(tabName,index) in tabNames" :key="tabName"
+                             :label="tabName==='command'?'命令行工具':tabName" :name="tabName" >
+                    <CommandLine v-if="tabName==='command'"/>
 
                     <Message/>
 
@@ -31,6 +31,7 @@ export default {
   components: { CommandLine, ConnectionDialog, Message, TableData },
   computed: {
     ...mapGetters([
+      'tabNames',
       'tabMap',
       'currentTab'
     ])

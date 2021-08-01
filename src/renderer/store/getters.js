@@ -4,7 +4,8 @@ const getters = {
   updateIndex: state => state.connection.updateIndex,
   conn: state => state.connection.conn,
   connName: state => state.connection.connName,
-  databaseName: state => state.main.databaseName,
+  databaseName: state => state.connection.databaseName,
+  tabNames: state => state.tab.tabNames,
   tabMap: state => state.tab.tabMap,
   currentTab: state => state.tab.currentTab
 }

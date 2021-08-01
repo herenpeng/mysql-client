@@ -93,11 +93,11 @@ export default {
       this.databases = null
     },
     closeDatabase () {
-      store.dispatch('main/closeDatabase')
+      store.dispatch('connection/closeDatabase')
       this.tables = null
     },
     showTables (databaseName) {
-      store.dispatch('main/setDatabaseName', databaseName)
+      store.dispatch('connection/setDatabaseName', databaseName)
       mysqlClient.showTables(this.conn, this.databaseName).then((data) => {
         this.tables = data
       }).catch(err => {

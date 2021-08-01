@@ -1,4 +1,5 @@
 const state = {
+  tabNames: [],
   tabMap: {},
   currentTab: {
     tabName: 'command',
@@ -9,19 +10,21 @@ const state = {
 
 const mutations = {
   OPEN_TAB (state, {tabName, tableData, message}) {
+    if (state.tabNames.indexOf(tabName) === -1) {
+      state.tabNames.push(tabName)
+    }
     state.tabMap[tabName] = {tabName, tableData, message}
     state.currentTab = {tabName, tableData, message}
   },
   CLOSE_TAB (state, tabName) {
-    if (state.currentTab.tabName === tabName) {
-      for (let name in state.tabMap) {
-        if (name !== tabName) {
-          state.currentTab = state.tabMap[name]
-        }
+    state.tabNames.forEach((tab, index) => {
+      if (tab === tabName) {
+        state.tabNames.splice(index, 1)
+        state.tabMap[tabName] = null
       }
-    }
-    if (state.tabMap[tabName] !== null) {
-      delete state.tabMap[tabName]
+    })
+    if (state.currentTab.tabName === tabName) {
+      state.currentTab = state.tabMap[state.tabNames[state.tabNames.length - 1]]
     }
   },
   CLICK_TAB (state, tabName) {
