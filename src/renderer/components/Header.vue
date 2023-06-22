@@ -2,8 +2,6 @@
     <el-menu
             mode="horizontal"
             @select="handleSelect"
-            background-color="#545c64"
-            text-color="#fff"
             active-text-color="#ffd04b">
         <el-menu-item index="1" @click="openCreateDialog">创建连接
             <i class="el-icon-circle-plus-outline el-icon--right"></i></el-menu-item>

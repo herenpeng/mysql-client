@@ -1,29 +1,32 @@
 <template>
 <div class="aside">
-    <el-menu
-            @open="handleOpen"
-            @close="handleClose"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-            unique-opened="unique-opened">
-        <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
-            <template slot="title">
-                <span>{{ conn.name }}</span>
-                <div style="float: right;margin-right: 15px;">
-                    <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
-                    <i class="el-icon-delete" @click="deleteConnection(index)"></i>
-                </div>
-            </template>
-            <el-submenu v-if="databases" v-for="(database, databaseIndex) in databases"
-                        :key="databaseIndex" :index="database.Database">
-                <template slot="title">{{ database.Database }}</template>
-                <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
-                              :index="table.TABLE_NAME" @click="openTab(table.TABLE_NAME)">{{ table.TABLE_NAME }}</el-menu-item>
-            </el-submenu>
-        </el-submenu>
-    </el-menu>
+    <el-scrollbar style="height: 100%;">
+        <el-menu
+                @open="handleOpen"
+                @close="handleClose"
+                active-text-color="#ffd04b"
+                unique-opened="unique-opened">
+            <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
+                <template slot="title">
+                    <i class="el-icon-link"></i>
+                    <span>{{ conn.name }}</span>
+                    <div style="float: right;margin-right: 15px;">
+                        <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
+                        <i class="el-icon-delete" @click="deleteConnection(index)"></i>
+                    </div>
+                </template>
+                <el-submenu v-if="databases" v-for="(database, databaseIndex) in databases"
+                            :key="databaseIndex" :index="database.Database">
 
+                    <template slot="title"><i class="el-icon-coin"></i>{{ database.Database }}</template>
+                    <el-menu-item v-if="tables" v-for="(table, tableIndex) in tables" :key="tableIndex"
+                                  :index="table.TABLE_NAME" @click="openTab(table.TABLE_NAME)">
+                        <i class="el-icon-tickets"></i>{{ table.TABLE_NAME }}
+                    </el-menu-item>
+                </el-submenu>
+            </el-submenu>
+        </el-menu>
+    </el-scrollbar>
 
 </div>
 </template>
@@ -141,7 +144,7 @@ export default {
 
 <style scoped>
 .aside {
-    overflow: scroll;
     height: 750px;
 }
+
 </style>
