@@ -7,6 +7,7 @@ const getters = {
   databaseName: state => state.connection.databaseName,
   tabNames: state => state.tab.tabNames,
   tabMap: state => state.tab.tabMap,
-  currentTab: state => state.tab.currentTab
+  currentTab: state => state.tab.currentTab,
+  showRightMenu: state => state.rightMenu.showRightMenu
 }
 export default getters

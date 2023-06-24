@@ -37,7 +37,6 @@ export default {
     ])
   },
   created () {
-    console.log(JSON.stringify(this.currentTab))
     this.tabName = this.currentTab.tabName
   },
   methods: {

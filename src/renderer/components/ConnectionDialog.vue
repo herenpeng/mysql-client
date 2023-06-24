@@ -90,9 +90,7 @@ export default {
       })
     },
     createConnection () {
-      console.log(this.connection)
       this.$refs['connectionForm'].validate((valid) => {
-        console.log(valid)
         if (valid) {
           store.dispatch('connection/createConnection', this.connection)
           this.handleClose()
@@ -103,9 +101,7 @@ export default {
       })
     },
     updateConnection () {
-      console.log(this.connection)
       this.$refs['connectionForm'].validate((valid) => {
-        console.log(valid)
         if (valid) {
           store.dispatch('connection/updateConnection', this.connection, this.updateIndex)
           this.handleClose()

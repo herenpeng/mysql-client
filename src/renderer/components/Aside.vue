@@ -7,12 +7,10 @@
                 active-text-color="#ffd04b"
                 unique-opened="unique-opened">
             <el-submenu v-for="(conn, index) in connections" :key="index" :index="String(index)" >
-                <template slot="title">
-                    <i class="el-icon-link"></i>
-                    <span>{{ conn.name }}</span>
-                    <div style="float: right;margin-right: 15px;">
-                        <i class="el-icon-edit" @click="openUpdateDialog(index)"></i>
-                        <i class="el-icon-delete" @click="deleteConnection(index)"></i>
+                <template slot="title" >
+                    <div @contextmenu.prevent="rightClick(index, $event)">
+                        <i class="el-icon-link"></i>
+                        <span >{{ conn.name }}</span>
                     </div>
                 </template>
                 <el-submenu v-if="databases" v-for="(database, databaseIndex) in databases"
@@ -26,6 +24,9 @@
                 </el-submenu>
             </el-submenu>
         </el-menu>
+        <div v-if="showRightMenu" class="right-menu" :style="{top: topNumber+'px', left: leftNumber+'px'}">
+            <RightMenu :index="index"></RightMenu>
+        </div>
     </el-scrollbar>
 
 </div>
@@ -35,14 +36,17 @@
 import { mapGetters } from 'vuex'
 import store from '@/store'
 import mysqlClient from '@/util/mysqlClient'
+import RightMenu from '@/components/RightMenu'
 
 export default {
   name: 'Aside',
+  components: { RightMenu },
   computed: {
     ...mapGetters([
       'connections',
       'conn',
-      'databaseName'
+      'databaseName',
+      'showRightMenu'
     ])
   },
   created () {
@@ -51,7 +55,10 @@ export default {
   data () {
     return {
       databases: null,
-      tables: null
+      tables: null,
+      index: -1,
+      topNumber: 0,
+      leftNumber: 0
     }
   },
   methods: {
@@ -69,6 +76,12 @@ export default {
       } else if (keyPath.length === 2) {
         this.closeDatabase()
       }
+    },
+    rightClick (index, e) {
+      this.index = index
+      store.dispatch('rightMenu/changeShowRightMenu', true)
+      this.topNumber = e.pageY
+      this.leftNumber = e.pageX
     },
     openConn (index) {
       const connection = this.connections[index]
@@ -115,36 +128,19 @@ export default {
         console.log(err)
         store.dispatch('tab/openTab', {tabName: tabName, message: {title: this.commandContent, data: err.message, type: 'error'}})
       })
-    },
-    openUpdateDialog (updateIndex) {
-      store.dispatch('connection/openUpdateDialog', updateIndex)
-    },
-    deleteConnection (index) {
-      this.$confirm('此操作将删除该链接, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        store.dispatch('connection/deleteConnection', index).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .aside {
     height: 750px;
 }
-
+.right-menu {
+    width: 120px;
+    position: fixed;
+    z-index: 1000;
+    background-color: white;
+}
 </style>

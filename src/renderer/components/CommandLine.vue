@@ -77,7 +77,7 @@ export default {
             store.dispatch('tab/openTab', {tabName: 'command', message: {title: this.commandContent, data: 'affectedRows:' + data.affectedRows, type: 'success'}})
           }
         }).catch(err => {
-          console.log(err)
+          // console.log(err)
           store.dispatch('tab/openTab', {tabName: 'command', message: {title: this.commandContent, data: err.message, type: 'error'}})
         })
       }
